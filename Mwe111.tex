@@ -1,0 +1,8 @@
+﻿\documentclass{article}
+\begin{document}
+{\catcode`\%=12
+\immediate\write18{git --no-pager log --pretty='format:@gitcommit{%h,%n author = {%an},%n date = {%ad},%n title = {%B},%n hash = {%H},%n description = {%d}%n}' --date=short > \jobname.gll}
+}
+
+Hello % not
+\end{document}
