@@ -1,11 +1,24 @@
-﻿\documentclass{article}
-\usepackage[datamodel=gitcommit,style=debug]{biblatex}
+﻿% !TEX TS-program = latexmkx
+% !TEX encoding = UTF-8 Unicode
+\documentclass{memoir} 
+\usepackage[%
+	datamodel=gitlog,
+	bibstyle=gitlog,
+	sorting=none,
+	date=iso8601,
+	firstinits=true,
+]{biblatex}
 \chapterstyle{bringhurst}
 {\catcode`\%=12
-\immediate\write18{git --no-pager log --pretty='format:@gitcommit{%h,%n author = {%an},%n committer = {%cn},%n adate = {%ad},%n cdate = {%cd},%n aemail = {%ae},%n cemail = {%ce},%n title = {%B},%n hash = {%H},%n description = {%d} }' --date=short > \jobname.gll}
+\immediate\write18{
+ git --no-pager log --reverse --pretty='format:@gitcommit{%h,%n 
+ author = {%an},%n 
+ date = {%ad},%n 
+ title = {%B} 
+ }' --date=short > \jobname.gll}
 }
 \addbibresource{\jobname.gll}
 \begin{document}
 \nocite{*}
-\printbibliography
+\printbibliography[title={Change Log}]
 \end{document}

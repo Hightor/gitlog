@@ -1,29 +1,15 @@
 ﻿\DeclareDatamodelEntrytypes{gitcommit}
 \DeclareDatamodelFields[type=field,datatype=literal]{
-  hash,
-  title,
+  title
 }
 \DeclareDatamodelFields[type=field,datatype=name]{
-  author,
-  committer,
+  author
 }
 \DeclareDatamodelFields[type=field, datatype=date]{
-  adate,
-  cdate,
-}
-\DeclareDatamodelFields[type=field, datatype=verbatim]{
-  aemail,
-  cemail,
-  description,
+  date
 }
 \DeclareDatamodelEntryfields[gitcommit]{
-  hash,
   title,
   author,
-  committer,
-  adate,
-  cdate,
-  aemail,
-  cemail,
-  description,
+  date
 }
