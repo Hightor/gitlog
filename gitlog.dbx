@@ -1,0 +1,15 @@
+﻿\DeclareDatamodelEntrytypes{gitcommit}
+\DeclareDatamodelFields[type=field,datatype=literal]{
+  title
+}
+\DeclareDatamodelFields[type=field,datatype=name]{
+  author
+}
+\DeclareDatamodelFields[type=field, datatype=date]{
+  date
+}
+\DeclareDatamodelEntryfields[gitcommit]{
+  title,
+  author,
+  date
+}
