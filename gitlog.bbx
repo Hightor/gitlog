@@ -21,7 +21,7 @@
 \defbibenvironment{bibliography}
   {\list
      {\printfield{entrykey}}
-     {\setlength{\labelwidth}{5em}%
+     {\setlength{\labelwidth}{0pt}%
       \setlength{\itemindent}{-\leftmargin}%
       \setlength{\itemsep}{\bibitemsep}%
       \setlength{\parsep}{\bibparsep}%
@@ -38,35 +38,21 @@
 \DeclareBibliographyDriver{gitcommit}{%
   \usebibmacro{bibindex}%
   \usebibmacro{begentry}%
-%  \setunit{\labelnamepunct}
-%  \newblock
   \usebibmacro{title}%
-  \newblock\setunit{, }%
-  \usebibmacro{author/translator+others}%
+  \newblock%
+  \usebibmacro{author}%
   \newunit
-  \printlist{language}%
-  \newunit\newblock
-  \usebibmacro{byauthor}%
-  \newunit\newblock
-  \usebibmacro{bytranslator+others}%
-  \newunit\newblock
-  \printfield{version}%
-  \newunit\newunit
-%  \usebibmacro{in:}%
-  \usebibmacro{journal+issuetitle}%
+  \usebibmacro{date}%
   \newunit
-  \usebibmacro{byeditor+others}%
-  \newunit
-  \usebibmacro{note+pages}%
-  \newunit\newblock
-  \usebibmacro{doi+eprint+url}%
-  \newunit\newblock
-  \usebibmacro{addendum+pubstate}%
-  \setunit{\bibpagerefpunct}\newblock
-  \usebibmacro{pageref}%
+  \usebibmacro{commithash}
   \usebibmacro{finentry}}
 
 \DeclareBibliographyAlias{*}{misc}
+
+\newbibmacro*{commithash}{%
+    \printtext[journaltitle]{%
+       \printfield{commithash}%
+}}
 
 \newbibmacro*{maintitle+title}{%
   \iffieldsequal{maintitle}{title}
