@@ -3,7 +3,8 @@
 
 \defbibenvironment{bibliography}
   {\list
-     {\printfield{entrykey}}
+     {\href{https://github.com/Hightor/gitlog/commit/\thefield{commithash}}{\printfield{entrykey}}%
+     }
      {\setlength{\labelwidth}{0pt}%
       \setlength{\itemindent}{-\leftmargin}%
       \setlength{\itemsep}{\bibitemsep}%
@@ -24,12 +25,16 @@
   \usebibmacro{author}%
   \newunit
   \usebibmacro{date}%
-  \newunit
-  \usebibmacro{commithash}
+  % \newblock\newunit
+  % \usebibmacro{entrykey}
   \usebibmacro{finentry}}
 
 \newbibmacro*{commithash}{%
   \printfield{commithash}%
+}
+
+\newbibmacro*{entrykey}{%
+  \href{https://github.com/Hightor/gitlog/commit/\thefield{commithash}}{\printfield{entrykey}}%
 }
 
 \endinput
