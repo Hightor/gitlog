@@ -14,11 +14,15 @@
  git --no-pager log --reverse --pretty='format:@gitcommit{%h,%n 
  author = {%an},%n 
  date = {%ad},%n 
- title = {%B} 
+ title = {%B},%n
+ commithash = {%H} 
  }' --date=short > \jobname.gll}
 }
 \addbibresource{\jobname.gll}
+\usepackage{hyperref}
+%\newcommand{\mylink}{}
 \begin{document}
 \nocite{*}
-\printbibliography[title={Change Log}]
+\raggedright
+\printbibliography[title={Change Log},type=gitcommit]
 \end{document}

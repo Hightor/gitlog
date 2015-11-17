@@ -1,15 +1,10 @@
 ﻿\DeclareDatamodelEntrytypes{gitcommit}
 \DeclareDatamodelFields[type=field,datatype=literal]{
-  title
-}
-\DeclareDatamodelFields[type=field,datatype=name]{
-  author
-}
-\DeclareDatamodelFields[type=field, datatype=date]{
-  date
+  commithash,
 }
 \DeclareDatamodelEntryfields[gitcommit]{
   title,
   author,
-  date
+  date,
+  commithash,
 }
