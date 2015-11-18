@@ -72,12 +72,12 @@
 \else
     {\catcode`\%=12
     \immediate\write18{
-     git --no-pager log --reverse --pretty='format:@gitcommit{%h,%n 
+     git --no-pager log --reverse --pretty="format:@gitcommit{%h,%n 
      author = {%an},%n 
      date = {%ad},%n 
      title = {%B},%n
      commithash = {%H} 
-     }' --date=short > \jobname.\gitLog@logext}
+     }" --date=short > \jobname.\gitLog@logext}
     }
 \fi
 \addbibresource{\jobname.\gitLog@logext}
