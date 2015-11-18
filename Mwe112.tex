@@ -1,13 +1,15 @@
 ﻿% !TEX TS-program = latexmkx
 % !TEX encoding = UTF-8 Unicode
 \documentclass{memoir} 
+\usepackage[mark]{gitinfo2}
 \usepackage{hyperref}
 \usepackage[%
-	nodate,
+%	nodate,
 	github=Hightor/gitlog,
-	title={Wonderful History},
+	title={Sample Git Change Log},
 ]{gitlog}
 \chapterstyle{bringhurst}
+\aliaspagestyle{chapter}{giplain}
 \input{blmemshade}
 \begin{document}
 \printGitLog
