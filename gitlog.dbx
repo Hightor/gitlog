@@ -1,4 +1,7 @@
 ﻿\DeclareDatamodelEntrytypes{gitcommit}
+\DeclareDatamodelFields[type=field,datatype=verbatim]{
+  title,
+}
 \DeclareDatamodelFields[type=field,datatype=literal]{
   commithash,
 }
