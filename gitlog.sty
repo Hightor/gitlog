@@ -30,9 +30,12 @@
     backend=biber,
 ]{biblatex}
 \SetupKeyvalOptions{family=gitlog,prefix=gitLog@}
-\DeclareBoolOption{nowrite}
-\DeclareBoolOption{nodate}
-\DeclareStringOption[gll]{logext}
+\DeclareBoolOption[true]{write}
+\DeclareComplementaryOption{nowrite}{write}
+\DeclareBoolOption[false]{date}
+\DeclareComplementaryOption{nodate}{date}
+\DeclareStringOption[\jobname]{bibfile}
+\DeclareStringOption[gitlog.bib]{bibext}
 \DeclareStringOption[Change Log]{title}
 \@ifpackageloaded{hyperref}{%
     \DeclareStringOption[]{github}
@@ -55,21 +58,19 @@
     \raggedright
     \printbibliography[title={\gitLog@title},type=gitcommit]
 }
-\ifgitLog@nodate
-    \newbibmacro*{date+author}{%
-        \relax
-    }
-\else
+\ifgitLog@date
     \newbibmacro*{date+author}{%
         \printtext{\\}%
         \usebibmacro{date}%
         \setunit*{, }%
         \usebibmacro{author}%
     }
-\fi
-\ifgitLog@nowrite
-    \relax
 \else
+    \newbibmacro*{date+author}{%
+        \relax
+    }
+\fi
+\ifgitLog@write
     {\catcode`\%=12
     \immediate\write18{
      git --no-pager log --reverse --pretty="format:@gitcommit{%h,%n 
@@ -77,8 +78,9 @@
      date = {%ad},%n 
      title = {%B},%n
      commithash = {%H} 
-     }" --date=short > \jobname.\gitLog@logext}
+     }" --date=short > \gitLog@bibfile.\gitLog@bibext}
     }
+\else
+    \relax
 \fi
-\addbibresource{\jobname.\gitLog@logext}
-
+\addbibresource{\gitLog@bibfile.\gitLog@bibext}
