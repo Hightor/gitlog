@@ -35,7 +35,7 @@ clean $(ginfile):
 	$(git) checkout $(dirtlist)
 
 gitlog.pdf: gitlog.tex $(codelist) $(ginfile)
-	rm -f $@ $(auxdir)/$@
+	rm -f $@ $(auxdir)/*
 	$(lmkexec) -outdir=$(auxdir) $(silent) -pdf -pdflatex="xelatex --shell-escape %O %S" "$<"
 	chmod a+rw $(auxdir) $(auxdir)/*
 	mv $(auxdir)/$@ ./
