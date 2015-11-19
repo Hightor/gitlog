@@ -18,7 +18,7 @@
 % -----------------------------------------------------
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{gitlog}[2015/12/12 0.0.beta typeset git change log]
-\RequirePackage{xstring}
+\RequirePackage{etoolbox}
 \RequirePackage{kvoptions}
 \RequirePackage[%	
     datamodel=gitlog,
@@ -29,14 +29,20 @@
     defernumbers=true,
     backend=biber,
 ]{biblatex}
+
 \SetupKeyvalOptions{family=gitlog,prefix=gitLog@}
-\DeclareBoolOption[true]{write}
-\DeclareComplementaryOption{nowrite}{write}
 \DeclareBoolOption[false]{date}
 \DeclareComplementaryOption{nodate}{date}
-\DeclareStringOption[\jobname]{bibfile}
-\DeclareStringOption[gitlog.bib]{bibext}
 \DeclareStringOption[Change Log]{title}
+% write:
+\DeclareBoolOption[true]{write}
+\AddToKeyvalOption{gitlog}{write}{\def\gitLog@writeset{true}}
+% nowrite:
+\DeclareComplementaryOption{nowrite}{write}
+\AddToKeyvalOption{gitlog}{nowrite}{\def\gitLog@writeset{true}}
+% bibfile:
+\DeclareStringOption{bibfile}
+% set up github option depending on hyperref
 \@ifpackageloaded{hyperref}{%
     \DeclareStringOption[]{github}
 }{%
@@ -44,10 +50,24 @@
         \PackageError{gitlog}{I can't generate GitHub links unless you load hyperref.}
     }
 }
-\ProcessKeyvalOptions*
+% process options:
+\ProcessKeyvalOptions{gitlog}
+% check if write/nowrite has been set:
+\ifdef\gitLog@writeset
+  {}
+  {% write/nowrite option has not been set,
+   % set boolean depending on value of \gitLog@bibfile:
+    \ifdefempty\gitLog@bibfile
+      {\booltrue{gitLog@write}}
+      {\boolfalse{gitLog@write}}%
+  }
+% set default for bibfile if necessary
+\ifdefempty\gitLog@bibfile
+  {\def\gitLog@bibfile{\jobname.gitlog.bib}}{}
+% make entrykey a link if github link requested
 \DeclareFieldFormat{entrykey}{\ttfamily[#1]}
 \@ifpackageloaded{hyperref}{%
-    \IfStrEq{}{\gitLog@github}{}{%
+    \ifdefempty\gitLog@github{}{%
         \DeclareFieldFormat{entrykey}{%
             \href{https://github.com/\gitLog@github/commit/\thefield{commithash}}{\ttfamily[#1]}%
         }
@@ -78,9 +98,9 @@
      date = {%ad},%n 
      title = {%B},%n
      commithash = {%H} 
-     }" --date=short > \gitLog@bibfile.\gitLog@bibext}
+     }" --date=short > \gitLog@bibfile}
     }
 \else
     \relax
 \fi
-\addbibresource{\gitLog@bibfile.\gitLog@bibext}
+\addbibresource{\gitLog@bibfile}
