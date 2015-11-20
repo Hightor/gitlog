@@ -10,14 +10,17 @@ git = git
 silent =
 include ~/.make/Makefile
 
-archive = gitlog.tar.gz
+pkg = gitlog
+archive = $(pkg).tar.gz
 ginfile = .git/gitHeadInfo.gin
-bibfile = gitlog.sample.bib
+pseudofile = gitHeadLocal.gin
+bibfile = $(pkg).sample.bib
 
-codelist = gitlog.sty gitlog.bbx gitlog.dbx
-docslist = gitlog.tex gitlog.pdf $(bibfile)
+codelist = $(pkg).sty $(pkg).bbx $(pkg).dbx
+docslist = $(pkg).tex $(pkg).pdf $(pseudofile) $(bibfile)
 morelist = README
-dirtlist = gitlog.pdf gitlog.tar.gz
+dirtlist = $(pkg).pdf $(pkg).tar.gz $(pseudofile)
+dirtlist = $(pkg).pdf 
 
 list = $(codelist) $(docslist) $(morelist)
 
@@ -34,7 +37,7 @@ $(archive): $(list)
 clean $(ginfile):
 	$(git) checkout $(dirtlist)
 
-gitlog.pdf: gitlog.tex $(codelist) $(ginfile)
+$(pkg).pdf: $(pkg).tex $(codelist) $(pseudofile)
 	rm -f $@ $(auxdir)/*
 	$(lmkexec) -outdir=$(auxdir) $(silent) -pdf -pdflatex="xelatex --shell-escape %O %S" "$<"
 	chmod a+rw $(auxdir) $(auxdir)/*
@@ -42,3 +45,7 @@ gitlog.pdf: gitlog.tex $(codelist) $(ginfile)
 
 %.view: %.pdf
 	$(viewpdf) $<
+
+$(pseudofile): $(ginfile)
+	cp $< $@
+	chmod 644 $@
