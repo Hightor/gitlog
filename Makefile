@@ -34,6 +34,7 @@ view: $(pkg).view
 $(archive): $(list)
 	# texlua build.lua ctan
 	# chmod -R 644 $^ testfiles/* 
+	chmod 644 $^
 	perl `which ctanify` $^
 	chmod 644 $@
 
