@@ -45,9 +45,13 @@
 % set up github option depending on hyperref
 \@ifpackageloaded{hyperref}{%
     \DeclareStringOption[]{github}
+    \DeclareStringOption[]{bitbucket}
 }{%
     \DeclareVoidOption{github}{%
         \PackageError{gitlog}{I can't generate GitHub links unless you load hyperref.}
+    }
+    \DeclareVoidOption{bitbucket}{%
+        \PackageError{gitlog}{I can't generate Bitbucket links unless you load hyperref.}
     }
 }
 % process options:
@@ -70,6 +74,11 @@
     \ifdefempty\gitLog@github{}{%
         \DeclareFieldFormat{entrykey}{%
             \href{https://github.com/\gitLog@github/commit/\thefield{commithash}}{\ttfamily[#1]}%
+        }
+    }
+    \ifdefempty\gitLog@bitbucket{}{%
+        \DeclareFieldFormat{entrykey}{%
+            \href{https://bitbucket.org/\gitLog@bitbucket/commits/\thefield{commithash}}{\ttfamily[#1]}%
         }
     }
 }{}
