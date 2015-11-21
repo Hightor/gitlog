@@ -13,13 +13,14 @@ include ~/.make/Makefile
 pkg = gitlog
 archive = $(pkg).tar.gz
 ginfile = .git/gitHeadInfo.gin
-pseudofile = gitHeadLocal.gin
+localgin = gitHeadLocal.gin
 bibfile = $(pkg).sample.bib
 
 codelist = $(pkg).sty $(pkg).bbx $(pkg).dbx
-docslist = $(pkg).tex $(pkg).pdf $(pseudofile) $(bibfile)
-morelist = README
-dirtlist = $(pkg).pdf $(pkg).tar.gz $(pseudofile)
+madelist = $(pkg).pdf $(localgin) $(bibfile)
+docslist = $(pkg).tex $(madelist)
+morelist = README.md
+dirtlist = $(madelist) $(archive)
 dirtlist = $(pkg).pdf 
 
 list = $(codelist) $(docslist) $(morelist)
@@ -37,15 +38,19 @@ $(archive): $(list)
 clean $(ginfile):
 	$(git) checkout $(dirtlist)
 
-$(pkg).pdf: $(pkg).tex $(codelist) $(pseudofile)
+$(pkg).pdf: $(pkg).tex $(codelist) $(localgin) $(bibfile)
 	rm -f $@ $(auxdir)/*
-	$(lmkexec) -outdir=$(auxdir) $(silent) -pdf -pdflatex="xelatex --shell-escape %O %S" "$<"
+	$(lmkexec) -outdir=$(auxdir) $(silent) -pdf -pdflatex="xelatex -interaction=batchmode %O %S" "$<"
 	chmod a+rw $(auxdir) $(auxdir)/*
 	mv $(auxdir)/$@ ./
 
 %.view: %.pdf
 	$(viewpdf) $<
 
-$(pseudofile): $(ginfile)
+$(localgin): $(ginfile)
 	cp $< $@
+	chmod 644 $@
+
+$(bibfile): $(ginfile)
+	git --no-pager log --reverse --pretty="format:@gitcommit{%h,%n author = {%an},%n date = {%ad},%n title = {%B},%n commithash = {%H} }" --date=short > $@
 	chmod 644 $@
