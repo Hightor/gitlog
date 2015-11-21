@@ -1,18 +1,12 @@
-gitlog.sty
-==========
+# gitlog.sty
 
-Typeset git logs as bibliographies
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+## Typeset git logs as bibliographies
 
-The *gitlog* package allows git change log history to be
-incorporated into LaTeX documents; the log data is obtained from
-the git distributed version control system.
+The *gitlog* package allows git change log history to be incorporated into LaTeX documents; the log data is obtained from the git distributed version control system.
 
-*gitlog* is licenced under the LPPL. For more details, please
-see the accompanying manual: gitlog.pdf.
+*gitlog* is licenced under the LPPL. For more details, please see the accompanying manual: gitlog.pdf.
 
-Change History
-~~~~~~~~~~~~~~
+## Change History
 
 Current Release: 0.0.beta 2015-11-24
 
