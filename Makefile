@@ -29,6 +29,8 @@ auxdir = .auxfiles
 
 ship: $(archive)
 
+view: $(pkg).view
+
 $(archive): $(list)
 	# texlua build.lua ctan
 	# chmod -R 644 $^ testfiles/* 
