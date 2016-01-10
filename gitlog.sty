@@ -132,12 +132,15 @@
     }
   }{}
 \newcommand{\printGitLog}{%
-  \begin{refsection}
+  \begin{refsection}[\gitLog@bibfile]
+    \begin{refcontext}[sorting=none]
     \nocite{*}
     \raggedright
     \printbibliography[env=gitlog,title={\gitLog@title},type=customa]
-  \end{refsection}
+  \end{refcontext}
+\end{refsection}
 }
+
 \ifgitLog@date
 \newbibmacro*{gitlog:date+author}{%
         \printtext{\\}%
@@ -163,4 +166,4 @@
 \else
     \relax
 \fi
-\addbibresource{\gitLog@bibfile}
+\addsectionbib[label=gitlog]{\gitLog@bibfile}
