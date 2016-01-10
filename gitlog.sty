@@ -16,15 +16,68 @@
 \ProvidesPackage{gitlog}[2015/11/22 0.0.beta typeset git change log]
 \RequirePackage{etoolbox}
 \RequirePackage{kvoptions}
-\RequirePackage[%	
-    datamodel=gitlog,
-	bibstyle=gitlog,
-	sorting=none,
-	date=iso8601,
-	firstinits=true,
-    defernumbers=true,
-    backend=biber,
-]{biblatex}
+\RequirePackage{biblatex}
+
+\defbibenvironment{gitlog}
+  {\list
+     {\printfield{entrykey}}%
+     {\setlength{\leftmargin}{5em}%
+      \setlength{\labelwidth}{0em}%
+      \setlength{\itemindent}{-\leftmargin}%
+      % \setlength{\itemindent}{0pt}%
+      \setlength{\itemsep}{\bibitemsep}%
+      % \addtolength{\leftmargin}{\labelsep}%
+      \setlength{\parsep}{\bibparsep}%
+      \renewcommand*{\makelabel}[1]{%
+	  \makebox[5em]{\ttfamily##1}}}}
+  {\endlist}
+  {\item}
+
+  \newbibmacro*{gitlog:begentry}{}
+\newbibmacro*{gitlog:finentry}{\finentry}
+
+\DeclareBibliographyDriver{customa}{%
+  \usebibmacro{bibindex}%
+  \usebibmacro{gitlog:begentry}%
+  \usebibmacro{title}%
+  \newblock%
+  \usebibmacro{gitlog:date+author}%
+  \usebibmacro{gitlog:finentry}%
+}
+
+\newbibmacro*{commithash}{%
+  \printfield{usera}%
+}
+
+% \newbibmacro*{entrykey}{%
+  % \href{https://github.com/Hightor/gitlog/commit/\thefield{commithash}}{\printfield{entrykey}}%
+% }
+
+% \DeclareFieldFormat{entrykey}{%
+  % \IfStrEq{}{\gitLog@github}{%
+    % #1
+  % }{%
+    % \href{https://github.com/\gitLog@github/commit/\thefield{commithash}}{#1}  
+  % }
+% }
+
+%\DeclareDatamodelEntrytypes{gitcommit}
+%\DeclareDatamodelFields[type=field,datatype=verbatim]{
+%  title,
+%}
+%\DeclareDatamodelFields[type=field,datatype=literal]{
+%  commithash,
+%}
+%\DeclareDatamodelEntryfields[gitcommit]{
+%  title,
+%  author,
+%  date,
+%  commithash,
+%}
+
+
+
+
 
 \SetupKeyvalOptions{family=gitlog,prefix=gitLog@}
 \DeclareBoolOption[false]{date}
@@ -69,40 +122,42 @@
 \@ifpackageloaded{hyperref}{%
     \ifdefempty\gitLog@github{}{%
         \DeclareFieldFormat{entrykey}{%
-            \href{https://github.com/\gitLog@github/commit/\thefield{commithash}}{\ttfamily[#1]}%
+            \href{https://github.com/\gitLog@github/commit/\thefield{usera}}{\ttfamily[#1]}%
         }
     }
     \ifdefempty\gitLog@bitbucket{}{%
         \DeclareFieldFormat{entrykey}{%
-            \href{https://bitbucket.org/\gitLog@bitbucket/commits/\thefield{commithash}}{\ttfamily[#1]}%
+            \href{https://bitbucket.org/\gitLog@bitbucket/commits/\thefield{usera}}{\ttfamily[#1]}%
         }
     }
-}{}
+  }{}
 \newcommand{\printGitLog}{%
+  \begin{refsection}
     \nocite{*}
     \raggedright
-    \printbibliography[title={\gitLog@title},type=gitcommit]
+    \printbibliography[env=gitlog,title={\gitLog@title},type=customa]
+  \end{refsection}
 }
 \ifgitLog@date
-    \newbibmacro*{date+author}{%
+\newbibmacro*{gitlog:date+author}{%
         \printtext{\\}%
         \usebibmacro{date}%
         \setunit*{, }%
         \usebibmacro{author}%
     }
 \else
-    \newbibmacro*{date+author}{%
+    \newbibmacro*{gitlog:date+author}{%
         \relax
     }
 \fi
 \ifgitLog@write
     {\catcode`\%=12
     \immediate\write18{
-     git --no-pager log --reverse --pretty="format:@gitcommit{%h,%n 
+      git --no-pager log --reverse --pretty="format:@customa{%h,%n 
      author = {%an},%n 
      date = {%ad},%n 
      title = {%B},%n
-     commithash = {%H} 
+     usera = {%H} 
      }" --date=short > \gitLog@bibfile}
     }
 \else
