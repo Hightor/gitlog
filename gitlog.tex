@@ -72,7 +72,6 @@
    pdftitle={The gitlog package: git change logs for LaTeX},
    pdfkeywords={git;changelog;dvcs},
 }
-\usepackage[style=mla]{biblatex}
 \usepackage[%
     write,
 	bibfile=gitlog.sample.bib,
@@ -87,7 +86,7 @@
 	\Huge \tpfname\\[2ex]%
 	\Large A proof of concept for automatic typesetting \\of change logs from the \git\ \textsc{dvcs}
 	}
-  \author{Brent Longborough}
+\author{Brent Longborough}
 \date{\DTMenglishmonthname{\DTMfetchmonth{gitdate}} \DTMfetchyear{gitdate}}
 \maketitle
 
@@ -124,6 +123,10 @@ unless you're happy with these limitations:
 Although this problem is easy to avoid 
 (and requires the \sfit{--shell-escape} command line option),
 there are no built-in protections.
+\item The \git\ change log is built and formatted using the 
+facilities of \sfit{biblatex} and \sfit{biber}.
+The way this is currently implemented makes it unlikely that 
+documents using \tpname\ can contain `normal' bibliographies.
 \item New lines in the \git\ change log commit messages are 
 simply converted to spaces. 
 The result is pretty ugly, 
@@ -142,10 +145,11 @@ and I welcome suggestions and contributed code via email or Github, where the ur
 \begin{enumerate}
 \item The package uses a git command internally, via the \tcmd{write18} command,
 to write out the change log in the shape of a rather strange
-\sfit{.bib} file.
+\sfit{.bib} file
 
-\item The change log .bib file contains a series of items of type \sfit{customa},
-  defined and formatted by the \tpname.sty file.
+\item The change log .bib file contains a series of items of type \sfit{gitcommit},
+defined and formatted by the \tpname\ 
+data model and bibliography styles which accompany the package.
 
 \item The rest of the work is done by persuading \sfit{biblatex} and \sfit{biber}
 to treat this data as a bibliography.
@@ -154,8 +158,8 @@ to treat this data as a bibliography.
 using this command (joined up into a single line):\\[\baselineskip]
 {\ttfamily
 git --no-pager log --reverse --date=short\\ 
---pretty="format:@customa\{\%h,\%n author = \{\%an\},\%n\\
-date = \{\%ad\}, \%n title = \{\%B\}, \%n usera = \{\%H\}\\
+--pretty="format:@gitcommit\{\%h,\%n author = \{\%an\},\%n\\
+date = \{\%ad\}, \%n title = \{\%B\}, \%n commithash = \{\%H\}\\
 \}" > \textit{filename}
 }
 
@@ -167,9 +171,6 @@ date = \{\%ad\}, \%n title = \{\%B\}, \%n usera = \{\%H\}\\
 To collect and typeset \git{} history,
 you load the \tpname\ package in the usual way:\\[0.5\baselineskip]
 \texttt{\textbackslash usepackage[$<options>$]\{gitlog\}}
-
-If you want to use bibLaTeX for bibliographies in the same document,
-then you must load bibLaTeX before loading this package.
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - -
 \section{Package options}
@@ -307,8 +308,6 @@ Initial beta release
 
 \section{Acknowledgements}
 
-Parth Nobel added support for using normal bibliographies along with this package.
-
 The \href{http://tex.stackexchange.com}{\TeX.SE community}
 has been a constant source of help, inspiration, and amazement.
 
@@ -359,7 +358,6 @@ I'll be very happy to receive your comments by email.\\[\baselineskip]
 Brent Longborough\\[\baselineskip]
 \textsf{brent+ctancontrib (bei) longborough (punkt) org}\\
 and at \href{http://tex.stackexchange.com/users/344/brent-longborough}{\TeX.SE}
-
 % -----------------------------------------------------
 \printGitLog
 % -----------------------------------------------------
